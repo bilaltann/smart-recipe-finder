@@ -4,7 +4,7 @@ MEASUREMENTS = [
     'cup', 'cups', 'tablespoon', 'tablespoons', 'teaspoon', 'teaspoons',
     'ounce', 'ounces', 'oz', 'pound', 'pounds', 'lb', 'lbs', 
     'stick', 'sticks', 'inch', 'inches', 'package', 'packages', 
-    'pinch', 'clove', 'cloves', 'large', 'medium', 'small', 'whole', 'half'
+    'pinch', 'large', 'medium', 'small', 'whole'
 ]
 
 # Durum/Hazırlık Terimleri Sözlüğü
