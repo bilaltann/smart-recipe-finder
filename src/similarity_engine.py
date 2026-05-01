@@ -54,15 +54,13 @@ class SimilarityEngine:
         vector = self.model.encode([processed_input])
         return vector
 
-    def find_similar_recipes(self, user_input, top_n=5):
+    def find_similar_recipes_by_vector(self, user_vector, top_n=5):
         """
         Adım 2: Kosinüs Benzerliği
         Adım 3: Sıralama Algoritması
         Adım 4: Formatlama
+        (Bu metot 3. kişi olan Inference Pipeline tarafından doğrudan vektör ile çağrılmak üzere ayrılmıştır.)
         """
-        # Kullanıcı vektörünü oluştur
-        user_vector = self.get_user_vector(user_input)
-        
         # Adım 2: Kosinüs Benzerliği (Cosine Similarity)
         # user_vector şekli (1, 384), self.embeddings şekli (N, 384)
         similarities = cosine_similarity(user_vector, self.embeddings)[0]
@@ -92,6 +90,16 @@ class SimilarityEngine:
             results.append(formatted_result)
             
         return results
+
+    def find_similar_recipes(self, user_input, top_n=5):
+        """
+        Gelen metni önce vektöre çevirir, sonra benzerlerini bulur.
+        """
+        # Kullanıcı vektörünü oluştur
+        user_vector = self.get_user_vector(user_input)
+        
+        # Doğrudan vektör üzerinden çalışan metoda gönder
+        return self.find_similar_recipes_by_vector(user_vector, top_n)
 
 
 # ------------------------------------------------------------------
