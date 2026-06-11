@@ -22,3 +22,31 @@ NLP aşamasından çıkan temizlenmiş anahtar kelimeler, tavsiye sisteminin tem
  * *Doğal Dil İşleme (NLP):* NLTK
  * *Derin Öğrenme ve Vektörizasyon:* PyTorch, HuggingFace (Transformers)
  * *Kullanıcı Arayüzü:* Streamlit
+
+   
+## Projenin Çalıştırılması
+
+Uygulamayı yerel bilgisayarınızda başlatmak için şu adımları izleyin:
+
+1. **Gerekli Kütüphaneleri Yükleyin:**
+   ```bash
+   pip install pandas numpy scikit-learn sentence-transformers nltk streamlit
+   ```
+
+2. **Streamlit Web Arayüzünü Başlatın:**
+   Bilgisayarınızdaki Python 3.12 ortamını hedef alarak ve Hugging Face bağlantı hatalarını engellemek için ayna sunucu ayarını içeren aşağıdaki komutları kullanabilirsiniz:
+
+   * **Eğer `smart-recipe-finder` (ana proje dizini) klasöründeyseniz:**
+     ```powershell
+     $env:HF_ENDPOINT="https://hf-mirror.com"; C:\Users\ozbrk\AppData\Local\Programs\Python\Python312\python.exe -m streamlit run src/app.py
+     ```
+
+   * **Eğer terminalde zaten `src` klasörünün içindeyseniz:**
+     ```powershell
+     $env:HF_ENDPOINT="https://hf-mirror.com"; C:\Users\ozbrk\AppData\Local\Programs\Python\Python312\python.exe -m streamlit run app.py
+     ```
+
+3. **Uygulamaya Erişin:**
+   Sunucu başarıyla ayağa kalktığında tarayıcınızda otomatik olarak açılacaktır. Açılmazsa manuel olarak şu adrese gidebilirsiniz:
+   👉 **http://localhost:8501**
+
