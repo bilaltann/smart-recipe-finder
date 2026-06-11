@@ -19,9 +19,9 @@ class RecipeInferencePipeline:
         print("[Inference Pipeline] Embedding modeli (all-MiniLM-L6-v2) yükleniyor...")
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
         
-        # 2. kişinin yazdığı tavsiye motorunu başlat
+        # 2. kişinin yazdığı tavsiye motorunu başlat (Model paylaşılarak bellek tasarrufu sağlanır)
         print("[Inference Pipeline] Tavsiye Motoru (Similarity Engine) başlatılıyor...")
-        self.similarity_engine = SimilarityEngine(embeddings_path, recipes_path)
+        self.similarity_engine = SimilarityEngine(embeddings_path, recipes_path, model=self.model)
         
         print("Çıkarım Boru Hattı hazır!\n")
 
@@ -54,9 +54,10 @@ class RecipeInferencePipeline:
             # Çıkan temiz metni modelinize vererek kullanıcının 384 boyutlu vektörünü oluşturun
             user_vector = self.model.encode([processed_text])
             
-            # Adım 3: Sistemi Birleştirme
-            # Elde edilen bu kullanıcı vektörünü alın ve 2. kişinin yazdığı tavsiye motoru fonksiyonuna (similarity arama kısmına) parametre olarak gönderin
-            recommendations = self.similarity_engine.find_similar_recipes_by_vector(user_vector, top_n=top_n)
+            # Adım 3: Sistemi Birleştirme (processed_text ile hibrit arama aktifleştirilir)
+            recommendations = self.similarity_engine.find_similar_recipes_by_vector(
+                user_vector, processed_text=processed_text, top_n=top_n
+            )
             
             return {
                 "success": True,
@@ -83,8 +84,13 @@ if __name__ == "__main__":
         res1 = pipeline.run_pipeline("chicken, fresh tomatoes, a little bit of salt")
         print("Durum:", "Başarılı" if "success" in res1 else "Hata")
         print("Temizlenen Malzemeler:", res1.get("clean_ingredients", ""))
+        print("-"*50)
         for i, rec in enumerate(res1.get("results", []), 1):
             print(f"{i}. {rec['title']} (%{rec['match_percentage']})")
+            print(f"   Eşleşen Malzemeler: {rec.get('matched_ingredients', [])}")
+            print(f"   Eksik Malzemeler  : {rec.get('missing_ingredients', [])}")
+            print(f"   Talimat Özeti     : {rec.get('instructions', '')[:100]}...")
+            print("-" * 50)
             
         # Test 2: Hatalı Senaryo (Sadece Sayı)
         print("\n" + "="*50)
